@@ -23,9 +23,15 @@ export const SilhouetteQuizGame: React.FC<SilhouetteQuizGameProps> = ({
   const [matchedTypedName, setMatchedTypedName] = useState<string>('');
   const [isAnswered, setIsAnswered] = useState<boolean>(false);
 
+  const lastCookieIdRef = React.useRef<string | null>(null);
+
   const loadNextQuestion = () => {
-    const randomIndex = Math.floor(Math.random() * COOKIES_DATA.length);
-    setTargetCookie(COOKIES_DATA[randomIndex]);
+    const availableCookies = COOKIES_DATA.filter((c) => c.id !== lastCookieIdRef.current);
+    const pool = availableCookies.length > 0 ? availableCookies : COOKIES_DATA;
+    const randomIndex = Math.floor(Math.random() * pool.length);
+    const selected = pool[randomIndex];
+    lastCookieIdRef.current = selected.id;
+    setTargetCookie(selected);
     setBrightnessLevel(0);
     setQuery('');
     setMatchedTypedName('');

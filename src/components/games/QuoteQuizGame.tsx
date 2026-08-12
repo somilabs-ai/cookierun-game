@@ -57,6 +57,8 @@ export const QuoteQuizGame: React.FC<QuoteQuizGameProps> = ({
     if (onInventoryUpdate) onInventoryUpdate(inv);
   };
 
+  const lastCookieIdRef = React.useRef<string | null>(null);
+
   const getActiveLang = (): LanguageCode => {
     if (difficulty === 'normal') return 'ko';
     if (difficulty === 'master') return 'en';
@@ -68,12 +70,17 @@ export const QuoteQuizGame: React.FC<QuoteQuizGameProps> = ({
   const t = UI_TRANSLATIONS[activeLang] || UI_TRANSLATIONS.ko;
 
   const loadNextQuestion = () => {
-    const randomIndex = Math.floor(Math.random() * COOKIES_DATA.length);
-    const selected = COOKIES_DATA[randomIndex];
+    // 이전 문제와 동일한 쿠키가 연달아 나오지 않도록 걸러냄
+    const availableCookies = COOKIES_DATA.filter((c) => c.id !== lastCookieIdRef.current);
+    const pool = availableCookies.length > 0 ? availableCookies : COOKIES_DATA;
+    const randomIndex = Math.floor(Math.random() * pool.length);
+    const selected = pool[randomIndex];
+    lastCookieIdRef.current = selected.id;
     setTargetCookie(selected);
 
     if (difficulty === 'challenge') {
-      const langs: LanguageCode[] = ['en', 'es', 'ja', 'ko'];
+      // 챌린지 모드: 선택 가능한 3가지 언어(한국어, 영어, 스페인어) 중 무작위 선택
+      const langs: LanguageCode[] = ['ko', 'en', 'es'];
       const randLang = langs[Math.floor(Math.random() * langs.length)];
       setChallengeLang(randLang);
     }

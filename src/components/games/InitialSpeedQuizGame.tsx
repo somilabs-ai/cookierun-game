@@ -24,9 +24,15 @@ export const InitialSpeedQuizGame: React.FC<InitialSpeedQuizGameProps> = ({
   const [combo, setCombo] = useState<number>(0);
   const [status, setStatus] = useState<'playing' | 'correct' | 'timeout'>('playing');
 
+  const lastCookieIdRef = React.useRef<string | null>(null);
+
   const loadNextQuestion = () => {
-    const randomIndex = Math.floor(Math.random() * COOKIES_DATA.length);
-    setTargetCookie(COOKIES_DATA[randomIndex]);
+    const availableCookies = COOKIES_DATA.filter((c) => c.id !== lastCookieIdRef.current);
+    const pool = availableCookies.length > 0 ? availableCookies : COOKIES_DATA;
+    const randomIndex = Math.floor(Math.random() * pool.length);
+    const selected = pool[randomIndex];
+    lastCookieIdRef.current = selected.id;
+    setTargetCookie(selected);
     setTimeLeft(10);
     setInputVal('');
     setMatchedTypedName('');
