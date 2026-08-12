@@ -15,6 +15,7 @@ import { KingdomNewsSection } from '@/components/news/KingdomNewsSection';
 import { getLocalStats, saveLocalStats } from '@/lib/supabase';
 import { getInventory, ItemInventory } from '@/lib/items';
 import { getUserProfile, UserProfile } from '@/lib/user';
+import { applyThemeToDocument } from '@/lib/theme';
 
 export default function Home() {
   const [activeMode, setActiveMode] = useState<GameModeId>('mode-3-quote');
@@ -44,6 +45,9 @@ export default function Home() {
     if (profile) {
       setUserProfileState(profile);
       setDifficulty(profile.preferredDifficulty);
+      if (profile.preferredTheme) {
+        applyThemeToDocument(profile.preferredTheme);
+      }
     } else {
       setIsModalOpen(true); // Open modal on first launch to request nickname!
     }
@@ -77,6 +81,9 @@ export default function Home() {
   const handleModalClose = (profile: UserProfile) => {
     setUserProfileState(profile);
     setDifficulty(profile.preferredDifficulty);
+    if (profile.preferredTheme) {
+      applyThemeToDocument(profile.preferredTheme);
+    }
     setIsModalOpen(false);
   };
 
