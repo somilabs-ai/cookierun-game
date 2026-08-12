@@ -197,37 +197,37 @@ export const QuoteQuizGame: React.FC<QuoteQuizGameProps> = ({
   return (
     <div className="max-w-2xl mx-auto space-y-6">
       {/* Flagship Header Banner */}
-      <div className="bg-gradient-to-r from-amber-900/60 via-amber-800/40 to-yellow-900/60 rounded-2xl p-5 border border-amber-700/50 shadow-xl text-center relative overflow-hidden">
-        <div className="absolute -right-6 -top-6 text-amber-500/10 pointer-events-none">
+      <div className="bg-slate-900/90 backdrop-blur-md rounded-2xl p-5 border border-slate-800 shadow-xl text-center relative overflow-hidden">
+        <div className="absolute -right-6 -top-6 text-slate-700/20 pointer-events-none">
           <MessageSquareQuote className="w-36 h-36" />
         </div>
 
         {/* Challenge Random Language Mission Badge */}
         {difficulty === 'challenge' ? (
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/50 text-xs font-black mb-2 animate-bounce">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-purple-950/80 text-purple-300 border border-purple-500/40 text-xs font-black mb-2 animate-bounce">
             <Shuffle className="w-4 h-4 text-purple-400" />
             <span>🎲 챌린지 미션 언어: {LANG_NAMES[challengeLang].flag} {LANG_NAMES[challengeLang].label}로 답하세요!</span>
           </div>
         ) : (
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 text-xs font-semibold mb-2">
-            <Sparkles className="w-3.5 h-3.5 text-yellow-400" />
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/10 text-amber-300 border border-amber-500/30 text-xs font-semibold mb-2">
+            <Sparkles className="w-3.5 h-3.5 text-amber-400" />
             <span>{LANG_NAMES[activeLang].flag} {LANG_NAMES[activeLang].label} 모드</span>
           </div>
         )}
 
-        <h2 className="text-2xl font-black text-amber-100">쿠키 명대사 & 스킬 퀴즈</h2>
-        <p className="text-xs text-amber-300/80 mt-1">
+        <h2 className="text-2xl font-black text-slate-100">쿠키 명대사 & 스킬 퀴즈</h2>
+        <p className="text-xs text-slate-400 mt-1 font-medium">
           쿠키의 대사와 스킬 힌트를 보고 주인공 쿠키의 이름을 맞춰보세요!
         </p>
 
         {/* Star Progress Indicator for Current Cookie */}
-        <div className="mt-3 inline-flex items-center gap-2 bg-amber-950/80 px-3 py-1 rounded-full border border-yellow-500/30 text-xs font-bold text-amber-200">
-          <span className="text-[11px] text-amber-400">현재 쿠키 별 획득:</span>
+        <div className="mt-3 inline-flex items-center gap-2 bg-slate-950/80 px-3.5 py-1 rounded-full border border-slate-800 text-xs font-bold text-slate-300">
+          <span className="text-[11px] text-slate-400">현재 쿠키 별 획득:</span>
           <div className="flex items-center gap-1">
-            <span className={allStars.normal ? 'text-yellow-400 font-extrabold' : 'text-amber-800'}>🇰🇷★</span>
-            <span className={allStars.master ? 'text-yellow-400 font-extrabold' : 'text-amber-800'}>🇺🇸★</span>
-            <span className={allStars.expert ? 'text-yellow-400 font-extrabold' : 'text-amber-800'}>🇪🇸★</span>
-            <span className={allStars.challenge ? 'text-yellow-400 font-extrabold' : 'text-amber-800'}>🎲★</span>
+            <span className={allStars.normal ? 'text-amber-400 font-extrabold' : 'text-slate-700'}>🇰🇷★</span>
+            <span className={allStars.master ? 'text-amber-400 font-extrabold' : 'text-slate-700'}>🇺🇸★</span>
+            <span className={allStars.expert ? 'text-amber-400 font-extrabold' : 'text-slate-700'}>🇪🇸★</span>
+            <span className={allStars.challenge ? 'text-amber-400 font-extrabold' : 'text-slate-700'}>🎲★</span>
           </div>
           {isAlreadyClearedOnThisDiff && (
             <span className="text-[10px] text-emerald-400 font-bold bg-emerald-950/80 px-1.5 py-0.5 rounded border border-emerald-500/30 ml-1">
@@ -242,16 +242,16 @@ export const QuoteQuizGame: React.FC<QuoteQuizGameProps> = ({
             <button
               onClick={handleUseHintItem}
               disabled={inventory.hintItems <= 0 || hintLevel >= 3}
-              className="px-3.5 py-1.5 rounded-xl bg-amber-900/80 hover:bg-amber-800 border border-yellow-500/40 text-yellow-200 text-xs font-bold flex items-center gap-1.5 shadow disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+              className="px-3.5 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700/80 border border-slate-700 text-amber-300 text-xs font-bold flex items-center gap-1.5 shadow disabled:opacity-50 disabled:cursor-not-allowed transition-all"
             >
-              <Search className="w-3.5 h-3.5 text-yellow-400" />
+              <Search className="w-3.5 h-3.5 text-amber-400" />
               <span>{t.useHintItem} ({inventory.hintItems}/3)</span>
             </button>
 
             <button
               onClick={handleUseAnswerItem}
               disabled={inventory.answerItems <= 0}
-              className="px-3.5 py-1.5 rounded-xl bg-purple-950/80 hover:bg-purple-900 border border-purple-500/50 text-purple-200 text-xs font-bold flex items-center gap-1.5 shadow disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+              className="px-3.5 py-1.5 rounded-xl bg-purple-950/80 hover:bg-purple-900 border border-purple-500/40 text-purple-200 text-xs font-bold flex items-center gap-1.5 shadow disabled:opacity-50 disabled:cursor-not-allowed transition-all"
             >
               <Compass className="w-3.5 h-3.5 text-purple-300" />
               <span>{t.useAnswerItem} ({inventory.answerItems}/5)</span>
@@ -264,7 +264,7 @@ export const QuoteQuizGame: React.FC<QuoteQuizGameProps> = ({
           <motion.div
             initial={{ opacity: 0, y: -5 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mt-3 px-3 py-1.5 bg-yellow-400/20 text-yellow-300 border border-yellow-400/40 rounded-lg text-xs font-bold text-center inline-block"
+            className="mt-3 px-3 py-1.5 bg-slate-800 text-amber-300 border border-slate-700 rounded-lg text-xs font-bold text-center inline-block"
           >
             {itemMessage}
           </motion.div>
@@ -272,22 +272,22 @@ export const QuoteQuizGame: React.FC<QuoteQuizGameProps> = ({
       </div>
 
       {/* Main Quiz Card */}
-      <div className="bg-amber-950/80 backdrop-blur-md rounded-2xl p-6 border border-amber-800/50 shadow-2xl space-y-6">
+      <div className="bg-slate-900/90 backdrop-blur-md rounded-2xl p-6 border border-slate-800 shadow-2xl space-y-6">
         {/* Hint Box 1: Quote */}
         <div className="space-y-2">
-          <div className="flex items-center justify-between text-xs font-bold text-amber-400">
+          <div className="flex items-center justify-between text-xs font-bold text-slate-300">
             <span className="flex items-center gap-1.5">
-              <MessageSquareQuote className="w-4 h-4 text-yellow-400" />
+              <MessageSquareQuote className="w-4 h-4 text-amber-400" />
               {t.hint1Title} ({LANG_NAMES[activeLang].flag} {LANG_NAMES[activeLang].label})
             </span>
-            <span className="bg-amber-900/60 px-2 py-0.5 rounded text-amber-300">100pt</span>
+            <span className="bg-slate-800 px-2 py-0.5 rounded text-amber-300 border border-slate-700">100pt</span>
           </div>
-          <div className="bg-gradient-to-r from-amber-900/40 to-amber-950/80 p-5 rounded-xl border border-amber-700/40 text-center relative">
-            <p className="text-lg font-serif italic text-amber-100 font-semibold leading-relaxed">
+          <div className="bg-slate-950/80 p-5 rounded-xl border border-slate-800 text-center relative">
+            <p className="text-lg font-serif italic text-slate-100 font-semibold leading-relaxed">
               &quot;{targetQuote}&quot;
             </p>
             {activeLang !== 'ko' && (
-              <p className="text-xs text-amber-400/60 mt-2 font-mono">
+              <p className="text-xs text-slate-400 mt-2 font-mono">
                 (한국어: &quot;{targetCookie.quote.ko}&quot;)
               </p>
             )}
@@ -297,28 +297,28 @@ export const QuoteQuizGame: React.FC<QuoteQuizGameProps> = ({
         {/* Hint Box 2: Class, Position, Element */}
         {hintLevel >= 2 ? (
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-2">
-            <div className="flex items-center justify-between text-xs font-bold text-amber-400">
+            <div className="flex items-center justify-between text-xs font-bold text-slate-300">
               <span>{t.hint2Title}</span>
-              <span className="bg-amber-900/60 px-2 py-0.5 rounded text-amber-300">70pt</span>
+              <span className="bg-slate-800 px-2 py-0.5 rounded text-amber-300 border border-slate-700">70pt</span>
             </div>
             <div className="grid grid-cols-3 gap-2 text-center text-xs">
-              <div className="bg-amber-900/50 p-2.5 rounded-lg border border-amber-700/30">
-                <span className="text-amber-400 block text-[10px] mb-0.5">{t.classType}</span>
-                <span className="font-bold text-amber-100">{targetCookie.classType}</span>
+              <div className="bg-slate-950/80 p-2.5 rounded-lg border border-slate-800">
+                <span className="text-slate-400 block text-[10px] mb-0.5">{t.classType}</span>
+                <span className="font-bold text-slate-100">{targetCookie.classType}</span>
               </div>
-              <div className="bg-amber-900/50 p-2.5 rounded-lg border border-amber-700/30">
-                <span className="text-amber-400 block text-[10px] mb-0.5">{t.position}</span>
-                <span className="font-bold text-amber-100">{targetCookie.position}</span>
+              <div className="bg-slate-950/80 p-2.5 rounded-lg border border-slate-800">
+                <span className="text-slate-400 block text-[10px] mb-0.5">{t.position}</span>
+                <span className="font-bold text-slate-100">{targetCookie.position}</span>
               </div>
-              <div className="bg-amber-900/50 p-2.5 rounded-lg border border-amber-700/30">
-                <span className="text-amber-400 block text-[10px] mb-0.5">{t.element}</span>
-                <span className="font-bold text-amber-100">{targetCookie.element}</span>
+              <div className="bg-slate-950/80 p-2.5 rounded-lg border border-slate-800">
+                <span className="text-slate-400 block text-[10px] mb-0.5">{t.element}</span>
+                <span className="font-bold text-slate-100">{targetCookie.element}</span>
               </div>
             </div>
           </motion.div>
         ) : (
           !isAnswered && (
-            <button onClick={unlockNextHint} className="w-full py-2.5 rounded-xl bg-amber-900/40 hover:bg-amber-800/50 border border-amber-700/40 text-amber-300 text-xs font-semibold flex items-center justify-center gap-1.5">
+            <button onClick={unlockNextHint} className="w-full py-2.5 rounded-xl bg-slate-800/80 hover:bg-slate-800 border border-slate-700 text-amber-300 text-xs font-semibold flex items-center justify-center gap-1.5">
               <HelpCircle className="w-4 h-4 text-amber-400" />
               <span>{t.openHint2}</span>
             </button>

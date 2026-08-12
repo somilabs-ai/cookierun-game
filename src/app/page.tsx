@@ -83,7 +83,7 @@ export default function Home() {
   const activeLang = difficulty === 'normal' ? 'ko' : difficulty === 'master' ? 'en' : difficulty === 'expert' ? 'es' : 'en';
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-amber-950 via-[#2A1810] to-amber-950 text-amber-50 font-sans flex flex-col">
+    <div className="min-h-screen bg-gradient-to-b from-slate-950 via-[#0F172A] to-slate-950 text-slate-100 font-sans flex flex-col selection:bg-amber-500/30">
       {/* Header Navigation */}
       <Navbar
         activeMode={activeMode}
@@ -138,9 +138,9 @@ export default function Home() {
       />
 
       {/* Footer */}
-      <footer className="border-t border-amber-900/40 bg-amber-950/80 py-6 text-center text-xs text-amber-400/60 space-y-1">
+      <footer className="border-t border-slate-800 bg-slate-950/80 py-6 text-center text-xs text-slate-400 space-y-1">
         <p>© 2026 쿠키런: 킹덤 맞추기 웹 게임 & 소식지 (Cookie Run Kingdom Multi-lang Quiz Web)</p>
-        <p className="text-[10px] text-amber-500/40">
+        <p className="text-[10px] text-slate-500">
           모든 쿠키 이미지 및 상표권은 데브시스터즈(Devsisters)에 있습니다.
         </p>
       </footer>

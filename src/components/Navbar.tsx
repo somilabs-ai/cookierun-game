@@ -19,12 +19,12 @@ interface NavbarProps {
 }
 
 const ICON_MAP: Record<string, React.ReactNode> = {
-  MessageSquareQuote: <MessageSquareQuote className="w-4 h-4" />,
-  Trophy: <Trophy className="w-4 h-4" />,
-  Zap: <Zap className="w-4 h-4" />,
-  Eye: <Eye className="w-4 h-4" />,
-  Sparkles: <Sparkles className="w-4 h-4" />,
-  Newspaper: <Newspaper className="w-4 h-4 text-emerald-400" />
+  MessageSquareQuote: <MessageSquareQuote className="w-4 h-4 text-amber-400" />,
+  Trophy: <Trophy className="w-4 h-4 text-yellow-400" />,
+  Zap: <Zap className="w-4 h-4 text-amber-300" />,
+  Eye: <Eye className="w-4 h-4 text-sky-400" />,
+  Sparkles: <Sparkles className="w-4 h-4 text-emerald-400" />,
+  Newspaper: <Newspaper className="w-4 h-4 text-teal-400" />
 };
 
 const DIFF_FLAGS: Record<DifficultyLevel, string> = {
@@ -47,7 +47,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   const t = UI_TRANSLATIONS[activeLang] || UI_TRANSLATIONS.ko;
 
   return (
-    <header className="sticky top-0 z-40 bg-amber-950/85 backdrop-blur-md border-b border-amber-800/40 text-amber-50">
+    <header className="sticky top-0 z-40 bg-slate-900/80 backdrop-blur-md border-b border-slate-800 text-slate-100 shadow-md">
       <div className="max-w-6xl mx-auto px-4 py-3">
         {/* Top Header Row */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
@@ -55,10 +55,10 @@ export const Navbar: React.FC<NavbarProps> = ({
           <div className="flex items-center gap-2">
             <span className="text-2xl">🍪</span>
             <div>
-              <h1 className="text-xl font-bold tracking-tight bg-gradient-to-r from-amber-200 via-amber-100 to-yellow-400 bg-clip-text text-transparent">
+              <h1 className="text-xl font-black tracking-tight bg-gradient-to-r from-amber-200 via-amber-300 to-yellow-400 bg-clip-text text-transparent">
                 {t.gameTitle}
               </h1>
-              <p className="text-xs text-amber-300/80">{t.gameSubtitle}</p>
+              <p className="text-xs text-slate-400 font-medium">{t.gameSubtitle}</p>
             </div>
           </div>
 
@@ -67,23 +67,23 @@ export const Navbar: React.FC<NavbarProps> = ({
             {/* User Nickname & Settings Button */}
             <button
               onClick={onOpenProfileModal}
-              className="flex items-center gap-1.5 bg-amber-900/80 hover:bg-amber-800 border border-yellow-500/40 px-3 py-1.5 rounded-full text-xs font-bold text-yellow-300 shadow transition-transform active:scale-95"
+              className="flex items-center gap-1.5 bg-slate-800/90 hover:bg-slate-700/80 border border-slate-700 px-3 py-1.5 rounded-full text-xs font-bold text-amber-300 shadow transition-transform active:scale-95"
             >
-              <User className="w-3.5 h-3.5 text-yellow-400" />
+              <User className="w-3.5 h-3.5 text-amber-400" />
               <span>{userProfile ? userProfile.nickname : '프로필 설정'}</span>
-              <span className="text-[10px] text-amber-300/80 bg-amber-950/80 px-1.5 py-0.5 rounded border border-yellow-500/30">
+              <span className="text-[10px] text-slate-300 bg-slate-950/80 px-1.5 py-0.5 rounded border border-slate-700/80">
                 {DIFF_FLAGS[difficulty]}
               </span>
-              <Settings className="w-3.5 h-3.5 text-amber-400 ml-0.5" />
+              <Settings className="w-3.5 h-3.5 text-slate-400 ml-0.5" />
             </button>
 
             {/* Score & Streak */}
-            <div className="flex items-center gap-3 bg-amber-900/60 px-3 py-1.5 rounded-full border border-amber-700/50 text-xs sm:text-sm font-semibold">
+            <div className="flex items-center gap-3 bg-slate-800/60 px-3 py-1.5 rounded-full border border-slate-700/60 text-xs sm:text-sm font-semibold text-slate-200">
               <div className="flex items-center gap-1.5 text-amber-300">
                 <Trophy className="w-4 h-4 text-yellow-400" />
                 <span>{totalScore.toLocaleString()}{t.score}</span>
               </div>
-              <div className="w-px h-4 bg-amber-700/60" />
+              <div className="w-px h-4 bg-slate-700" />
               <div className="flex items-center gap-1 text-orange-400">
                 <Flame className="w-4 h-4 fill-orange-500 animate-pulse" />
                 <span>{streak}{t.streak}</span>
@@ -102,14 +102,14 @@ export const Navbar: React.FC<NavbarProps> = ({
                 onClick={() => onSelectMode(mode.id)}
                 className={`relative flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-medium whitespace-nowrap transition-all duration-200 ${
                   isActive
-                    ? 'bg-gradient-to-r from-amber-500 to-yellow-500 text-amber-950 font-bold shadow-lg shadow-amber-500/20 scale-[1.02]'
-                    : 'bg-amber-900/40 text-amber-200 hover:bg-amber-800/50 hover:text-white border border-amber-800/30'
+                    ? 'bg-gradient-to-r from-amber-500 to-yellow-500 text-slate-950 font-bold shadow-md shadow-amber-500/10 scale-[1.01]'
+                    : 'bg-slate-800/60 text-slate-300 hover:bg-slate-700/70 hover:text-white border border-slate-700/40'
                 }`}
               >
                 {ICON_MAP[mode.iconName]}
                 <span>{mode.title}</span>
                 {mode.isMain && (
-                  <span className="ml-1 px-1.5 py-0.5 text-[10px] font-extrabold bg-amber-950 text-yellow-300 rounded-md border border-yellow-500/50">
+                  <span className="ml-1 px-1.5 py-0.5 text-[10px] font-black bg-slate-950 text-amber-400 rounded-md border border-amber-500/40">
                     MAIN
                   </span>
                 )}
