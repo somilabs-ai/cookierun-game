@@ -1,69 +1,149 @@
-import Image from "next/image";
+'use client';
+
+import React, { useState, useEffect } from 'react';
+import { GameModeId, DifficultyLevel } from '@/types/cookie';
+import { Navbar } from '@/components/Navbar';
+import { DifficultySelector } from '@/components/DifficultySelector';
+import { ItemBadgeBar } from '@/components/ItemBadgeBar';
+import { OnboardingModal } from '@/components/OnboardingModal';
+import { QuoteQuizGame } from '@/components/games/QuoteQuizGame';
+import { IdealWorldcupGame } from '@/components/games/IdealWorldcupGame';
+import { InitialSpeedQuizGame } from '@/components/games/InitialSpeedQuizGame';
+import { SilhouetteQuizGame } from '@/components/games/SilhouetteQuizGame';
+import { CookidleGame } from '@/components/games/CookidleGame';
+import { KingdomNewsSection } from '@/components/news/KingdomNewsSection';
+import { getLocalStats, saveLocalStats } from '@/lib/supabase';
+import { getInventory, ItemInventory } from '@/lib/items';
+import { getUserProfile, UserProfile } from '@/lib/user';
 
 export default function Home() {
+  const [activeMode, setActiveMode] = useState<GameModeId>('mode-3-quote');
+  const [difficulty, setDifficulty] = useState<DifficultyLevel>('normal');
+  const [totalScore, setTotalScore] = useState<number>(0);
+  const [streak, setStreak] = useState<number>(0);
+  const [maxStreak, setMaxStreak] = useState<number>(0);
+
+  const [userProfile, setUserProfileState] = useState<UserProfile | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+
+  const [inventory, setInventory] = useState<ItemInventory>({
+    answerItems: 1,
+    hintItems: 1,
+    lastAnswerRecharge: Date.now(),
+    lastHintRecharge: Date.now()
+  });
+
+  useEffect(() => {
+    const stats = getLocalStats();
+    setTotalScore(stats.totalScore || 0);
+    setStreak(stats.currentStreak || 0);
+    setMaxStreak(stats.maxStreak || 0);
+    setInventory(getInventory());
+
+    const profile = getUserProfile();
+    if (profile) {
+      setUserProfileState(profile);
+      setDifficulty(profile.preferredDifficulty);
+    } else {
+      setIsModalOpen(true); // Open modal on first launch to request nickname!
+    }
+  }, []);
+
+  const handleSuccess = (points: number) => {
+    const newScore = totalScore + points;
+    const newStreak = streak + 1;
+    const newMaxStreak = Math.max(maxStreak, newStreak);
+
+    setTotalScore(newScore);
+    setStreak(newStreak);
+    setMaxStreak(newMaxStreak);
+
+    saveLocalStats({
+      totalScore: newScore,
+      currentStreak: newStreak,
+      maxStreak: newMaxStreak
+    });
+  };
+
+  const handleFailure = () => {
+    setStreak(0);
+    saveLocalStats({
+      totalScore,
+      currentStreak: 0,
+      maxStreak
+    });
+  };
+
+  const handleModalClose = (profile: UserProfile) => {
+    setUserProfileState(profile);
+    setDifficulty(profile.preferredDifficulty);
+    setIsModalOpen(false);
+  };
+
+  const activeLang = difficulty === 'normal' ? 'ko' : difficulty === 'master' ? 'en' : difficulty === 'expert' ? 'es' : 'en';
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
+    <div className="min-h-screen bg-gradient-to-b from-amber-950 via-[#2A1810] to-amber-950 text-amber-50 font-sans flex flex-col">
+      {/* Header Navigation */}
+      <Navbar
+        activeMode={activeMode}
+        onSelectMode={(modeId) => setActiveMode(modeId)}
+        totalScore={totalScore}
+        streak={streak}
+        activeLang={activeLang}
+        difficulty={difficulty}
+        userProfile={userProfile}
+        onOpenProfileModal={() => setIsModalOpen(true)}
+      />
+
+      {/* Main Content Area */}
+      <main className="flex-1 max-w-6xl w-full mx-auto px-4 py-6 space-y-4">
+        {/* Difficulty Selector Bar */}
+        <DifficultySelector
+          difficulty={difficulty}
+          onSelectDifficulty={(diff) => setDifficulty(diff)}
         />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
+
+        {/* Item Badge Bar */}
+        <ItemBadgeBar inventory={inventory} activeLang={activeLang} />
+
+        {/* Game Views */}
+        {activeMode === 'mode-3-quote' && (
+          <QuoteQuizGame
+            difficulty={difficulty}
+            onSuccess={handleSuccess}
+            onFailure={handleFailure}
+            onInventoryUpdate={(inv) => setInventory(inv)}
+          />
+        )}
+        {activeMode === 'mode-5-worldcup' && <IdealWorldcupGame />}
+        {activeMode === 'mode-4-speed' && (
+          <InitialSpeedQuizGame onSuccess={handleSuccess} onFailure={handleFailure} />
+        )}
+        {activeMode === 'mode-2-silhouette' && (
+          <SilhouetteQuizGame onSuccess={handleSuccess} onFailure={handleFailure} />
+        )}
+        {activeMode === 'mode-1-cookidle' && (
+          <CookidleGame onSuccess={handleSuccess} onFailure={handleFailure} />
+        )}
+        {activeMode === 'news-section' && <KingdomNewsSection />}
       </main>
+
+      {/* Onboarding & Profile Modal */}
+      <OnboardingModal
+        isOpen={isModalOpen}
+        onClose={handleModalClose}
+        canCloseWithoutSaving={!!userProfile}
+        activeLang={activeLang}
+      />
+
+      {/* Footer */}
+      <footer className="border-t border-amber-900/40 bg-amber-950/80 py-6 text-center text-xs text-amber-400/60 space-y-1">
+        <p>© 2026 쿠키런: 킹덤 맞추기 웹 게임 & 소식지 (Cookie Run Kingdom Multi-lang Quiz Web)</p>
+        <p className="text-[10px] text-amber-500/40">
+          모든 쿠키 이미지 및 상표권은 데브시스터즈(Devsisters)에 있습니다.
+        </p>
+      </footer>
     </div>
   );
 }
