@@ -35,7 +35,39 @@ const RAW_COOKIES_DATA = [
     releaseYear: 2021,
     imageUrl: '/images/cookies/pure_vanilla.png',
     color: '#FDFD96',
-    aliases: ['퓨어바닐라', '퓨어 바닐라', 'pure vanilla', 'pure vanilla cookie', 'galleta de vainilla pura']
+    aliases: ['퓨어바닐라', '퓨어 바닐라', 'pure vanilla', 'pure vanilla cookie', 'galleta de vainilla pura', '구원의 퓨어바닐라', '각성 퓨어바닐라'],
+    awakening: {
+      name: {
+        ko: '구원의 퓨어바닐라 쿠키',
+        en: 'Savior Pure Vanilla Cookie',
+        es: 'Galleta de Vainilla Pura Salvador',
+        ja: '救いのピュアバニラ味クッキー'
+      },
+      title: {
+        ko: '구원의 빛 (각성)',
+        en: 'Light of Salvation (Awakened)',
+        es: 'Luz de Salvación (Despertado)',
+        ja: '救いの光（覚醒）'
+      },
+      quote: {
+        ko: '진실된 마음으로 모두에게 따뜻한 평화를 선물하겠어요.',
+        en: 'With a sincere heart, I shall grant warm peace to everyone.',
+        es: 'Con un corazón sincero, otorgaré una paz cálida a todos.',
+        ja: '真実の心で皆に warm 平和を贈ります。'
+      },
+      skillName: {
+        ko: '구원의 바닐라 축복',
+        en: 'Vanilla Blessing of Salvation',
+        es: 'Bendición de Vainilla de Salvación',
+        ja: '救いのバニラ祝福'
+      },
+      lore: {
+        ko: '✨ [각성 쿠키 데이터] 퓨어바닐라 쿠키의 구원과 희망의 마력이 각성하여 아군에게 진실된 보호막과 회복을 선사합니다.',
+        en: '✨ [Awakened Cookie] Pure Vanilla Cookie’s magic of salvation has awakened to grant ultimate shields and healing to allies.',
+        es: '✨ [Galleta Despertada] ¡La magia de salvación de Galleta de Vainilla Pura despierta!',
+        ja: '✨ [覚醒クッキー] ピュアバニラ味クッキーの救いと希望の魔力が覚醒！'
+      }
+    }
   },
   {
     id: 'dark_cacao',
@@ -70,7 +102,39 @@ const RAW_COOKIES_DATA = [
     releaseYear: 2022,
     imageUrl: '/images/cookies/dark_cacao.png',
     color: '#362228',
-    aliases: ['다크카카오', '다크 카카오', 'dark cacao', 'dark cacao cookie']
+    aliases: ['다크카카오', '다크 카카오', 'dark cacao', 'dark cacao cookie', '용군주 다크카카오', '각성 다크카카오', '용군주 다크카카오 쿠키'],
+    awakening: {
+      name: {
+        ko: '용군주 다크카카오 쿠키',
+        en: 'Dragon Lord Dark Cacao Cookie',
+        es: 'Galleta de Cacao Oscuro Señor Dragón',
+        ja: '龍君主ダークカカオ味クッキー'
+      },
+      title: {
+        ko: '용군주 (각성 1단계)',
+        en: 'Dragon Lord (Awakened Tier 1)',
+        es: 'Señor Dragón (Despertado)',
+        ja: '龍君主（覚醒）'
+      },
+      quote: {
+        ko: '드래곤의 검과 흑염으로 내 백성을 수호하리라!',
+        en: 'With dragon’s blade and dark flame, I shall protect my realm!',
+        es: '¡Con la espada del dragón y la llama oscura, protegeré a mi reino!',
+        ja: 'ドラゴンの剣と黒炎で我が民を守る！'
+      },
+      skillName: {
+        ko: '용의 분노와 결의',
+        en: 'Dragon’s Fury & Resolve',
+        es: 'Furia y Resolución del Dragón',
+        ja: '竜の怒りと決意'
+      },
+      lore: {
+        ko: '🐉 [각성 쿠키 데이터] 다크카카오 쿠키가 용족의 힘을 받아 각성한 모습인 "용군주 다크카카오 쿠키"! 흑용의 힘으로 한층 더 강렬해진 고대의 수호자입니다.',
+        en: '🐉 [Awakened Cookie] Dark Cacao Cookie awakened with dragon lord powers to become Dragon Lord Dark Cacao Cookie!',
+        es: '🐉 [Galleta Despertada] ¡Galleta de Cacao Oscuro despierta con el poder de los señores dragón!',
+        ja: '🐉 [覚醒クッキー] ダークカカオ味クッキーがドラゴンの力を受けて覚醒した「龍君主ダークカカオ味クッキー」！'
+      }
+    }
   },
   {
     id: 'hollyberry',
@@ -468,6 +532,88 @@ const RAW_COOKIES_DATA = [
     imageUrl: '/images/cookies/strawberry.png',
     color: '#FFB6C1',
     aliases: ['딸기맛', 'strawberry', 'strawberry cookie']
+  },
+  {
+    id: 'shadow_milk',
+    name: {
+      ko: '쉐도우밀크 쿠키',
+      en: 'Shadow Milk Cookie',
+      es: 'Galleta de Leche Sombría',
+      ja: 'シャドーミルク味クッキー'
+    },
+    quote: {
+      ko: '거짓과 환상의 연극에 오신 것을 환영합니다!',
+      en: 'Welcome to the theater of lies and illusions!',
+      es: '¡Bienvenidos al teatro de mentiras e ilusiones!',
+      ja: '嘘と幻の劇へようこそ！'
+    },
+    skillName: {
+      ko: '기만의 희극',
+      en: 'Deceitful Comedy',
+      es: 'Comedia del Engaño',
+      ja: '欺瞞の喜劇'
+    },
+    skillDescription: {
+      ko: '환영 인형극을 펼쳐 적의 정신을 혼란에 빠뜨리고 신비로운 거짓의 파동을 일으킵니다.',
+      en: 'Performs a puppet show of illusions to confuse enemies with waves of deceit.',
+      es: 'Realiza un espectáculo de marionetas para confundir a los enemigos.',
+      ja: '幻影の傀儡劇を繰り広げ、敵の精神を混乱させます。'
+    },
+    rarity: 'WITCH',
+    classType: '마법형',
+    position: '중앙',
+    element: '어둠',
+    releaseYear: 2024,
+    imageUrl: '/images/cookies/pure_vanilla.png',
+    color: '#4B0082',
+    aliases: ['쉐도우밀크', '섀도우밀크', '섀도우 밀크', 'shadow milk', 'shadow milk cookie'],
+    easterEggLore: {
+      ko: '🔮 [마녀 등급 쿠키] 쿠키런: 킹덤의 최상위 마법 신 등급인 WITCH(마녀) 등급 쿠키입니다! 거짓과 심연을 관장하는 비스트이자 마녀 등급의 강자!',
+      en: '🔮 [WITCH Grade Cookie] Belongs to the supreme WITCH rarity class in Cookie Run Kingdom!',
+      es: '🔮 [Galleta de Rango Bruja] ¡Pertenece a la clase de rareza suprema WITCH!',
+      ja: '🔮 [魔女級クッキー] クッキーラン：キングダムの最高峰WITCH（魔女）等級クッキーです！'
+    }
+  },
+  {
+    id: 'supreme_witch',
+    name: {
+      ko: '태초의 마녀',
+      en: 'The Primordial Witch',
+      es: 'La Bruja Primordial',
+      ja: '太古の魔女'
+    },
+    quote: {
+      ko: '쿠키들에게 생명의 불꽃을 불어넣은 자...',
+      en: 'The one who breathed life into all cookies...',
+      es: 'Aquella que dio vida a todas las galletas...',
+      ja: 'クッキーたちに生命の炎を吹き込んだ者…'
+    },
+    skillName: {
+      ko: '오븐의 마녀 연금술',
+      en: 'Witch Alchemy of the Oven',
+      es: 'Alquimia de la Bruja del Horno',
+      ja: '魔女のオーブン錬金術'
+    },
+    skillDescription: {
+      ko: '태초의 오븐 불꽃을 일으켜 모든 쿠키의 마력을 증폭시키고 신비로운 마녀 마법을 시전합니다.',
+      en: 'Ignites the primordial oven flame to amplify power and cast mystic witch magic.',
+      es: 'Enciende la llama del horno primordial para amplificar el poder.',
+      ja: '太古のオーブンの炎を燃え wild 魔法を唱えます。'
+    },
+    rarity: 'WITCH',
+    classType: '지원형',
+    position: '후방',
+    element: '어둠',
+    releaseYear: 2024,
+    imageUrl: '/images/cookies/white_lily.png',
+    color: '#8A2BE2',
+    aliases: ['마녀', '마녀쿠키', '태초의마녀', 'witch', 'witch cookie', 'primordial witch'],
+    easterEggLore: {
+      ko: '🧙‍♀️ [마녀 등급 쿠키] 쿠키런 세계관의 기원이자 오븐 속에서 쿠키들을 최초로 창조한 최상위 WITCH(마녀) 등급 신적 존재!',
+      en: '🧙‍♀️ [WITCH Grade Cookie] The origin of the Cookie Run universe who baked all cookies in the oven!',
+      es: '🧙‍♀️ [Galleta de Rango Bruja] ¡El origen del universo de Cookie Run!',
+      ja: '🧙‍♀️ [魔女級クッキー] クッキーラン世界観の起源でありオーブンでクッキーたちを創造した最高峰WITCH等級！'
+    }
   }
 ];
 

@@ -440,8 +440,14 @@ export const QuoteQuizGame: React.FC<QuoteQuizGameProps> = ({
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4 py-2">
                 <img src={targetCookie.imageUrl} alt={targetOfficialName} className="w-28 h-28 object-cover rounded-2xl border-2 border-yellow-400 shadow-xl" />
                 <div className="text-left space-y-1">
-                  <span className="text-xs font-bold text-yellow-400 px-2 py-0.5 rounded bg-amber-950/80 border border-yellow-500/40 inline-block">
-                    {targetCookie.rarity}
+                  <span className={`text-xs font-extrabold px-2.5 py-0.5 rounded-md border inline-block shadow-md ${
+                    targetCookie.rarity === 'WITCH'
+                      ? 'bg-fuchsia-950/90 text-fuchsia-300 border-fuchsia-500/80 shadow-fuchsia-900/50'
+                      : targetCookie.rarity === 'BEAST'
+                      ? 'bg-red-950/90 text-red-300 border-red-500/80'
+                      : 'bg-amber-950/80 text-yellow-300 border-yellow-500/40'
+                  }`}>
+                    {targetCookie.rarity === 'WITCH' ? '🔮 WITCH (마녀)' : targetCookie.rarity}
                   </span>
                   <h3 className="text-2xl font-black text-amber-100">{targetOfficialName}</h3>
                   <p className="text-xs text-amber-300/80">
@@ -452,6 +458,35 @@ export const QuoteQuizGame: React.FC<QuoteQuizGameProps> = ({
                   </p>
                 </div>
               </div>
+
+              {/* Awakening Form Special Banner */}
+              {targetCookie.awakening && (
+                <div className="bg-gradient-to-r from-red-950/90 via-purple-950/90 to-amber-950/90 border-2 border-amber-400/80 rounded-xl p-4 text-left space-y-2 shadow-2xl relative overflow-hidden">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-1.5 text-amber-300 font-black text-xs">
+                      <Sparkles className="w-4 h-4 text-amber-400 animate-pulse" />
+                      <span>⚡ 쿠키 각성 형태 (Awakened Form): {targetCookie.awakening.title?.[activeLang] || targetCookie.awakening.title?.ko || '각성'}</span>
+                    </div>
+                    <span className="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 text-[10px] font-extrabold border border-amber-500/40">
+                      ✨ 각성 형태 보유
+                    </span>
+                  </div>
+
+                  <div className="space-y-1">
+                    <h4 className="text-sm font-black text-amber-100 flex items-center gap-1.5">
+                      <span>{targetCookie.awakening.name[activeLang] || targetCookie.awakening.name.ko}</span>
+                    </h4>
+                    <p className="text-xs font-serif italic text-amber-200/90 bg-slate-950/70 p-2.5 rounded-lg border border-amber-500/30">
+                      &quot;{targetCookie.awakening.quote[activeLang] || targetCookie.awakening.quote.ko}&quot;
+                    </p>
+                    {targetCookie.awakening.lore && (
+                      <p className="text-[11px] text-amber-300/80 font-semibold pt-0.5">
+                        {targetCookie.awakening.lore[activeLang] || targetCookie.awakening.lore.ko}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              )}
 
               {/* Otaku Lore Easter Egg Banner */}
               {targetCookie.easterEggLore && (

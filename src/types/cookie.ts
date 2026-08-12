@@ -6,6 +6,7 @@ export type CookieRarity =
   | 'LEGENDARY'
   | 'ANCIENT'
   | 'BEAST'
+  | 'WITCH'
   | 'SPECIAL';
 
 export type CookieClass =
@@ -43,6 +44,16 @@ export interface MultiLangText {
 
 export type DifficultyLevel = 'normal' | 'master' | 'expert' | 'challenge';
 
+export interface AwakeningData {
+  name: MultiLangText;
+  title?: MultiLangText;
+  quote: MultiLangText;
+  skillName?: MultiLangText;
+  skillDescription?: MultiLangText;
+  imageUrl?: string;
+  lore?: MultiLangText;
+}
+
 export interface CookieData {
   id: string;
   name: MultiLangText;
@@ -59,6 +70,7 @@ export interface CookieData {
   color: string;
   aliases?: string[];
   easterEggLore?: MultiLangText;
+  awakening?: AwakeningData;
 }
 
 export type GameModeId =

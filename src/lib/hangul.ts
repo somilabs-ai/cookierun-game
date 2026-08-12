@@ -66,7 +66,18 @@ export function isCorrectAnswer(
     if (normUser === langName) return true;
   }
 
-  // 4. 별칭(Aliases) 등록건 검사
+  // 4. 각성(Awakening) 명칭 검사
+  if (cookie.awakening) {
+    const awkTarget = normalizeCookieName(cookie.awakening.name[targetLang] || cookie.awakening.name.ko);
+    if (normUser === awkTarget) return true;
+    for (const lang of ['ko', 'en', 'es', 'ja'] as LanguageCode[]) {
+      if (cookie.awakening.name[lang] && normalizeCookieName(cookie.awakening.name[lang]) === normUser) {
+        return true;
+      }
+    }
+  }
+
+  // 5. 별칭(Aliases) 등록건 검사
   if (cookie.aliases && cookie.aliases.length > 0) {
     for (const alias of cookie.aliases) {
       if (normalizeCookieName(alias) === normUser) return true;
