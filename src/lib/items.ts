@@ -23,7 +23,7 @@ export function getInventory(): ItemInventory {
   const saved = localStorage.getItem('cookierun_item_inventory');
   const now = Date.now();
 
-  let inventory: ItemInventory = saved
+  const inventory: ItemInventory = saved
     ? JSON.parse(saved)
     : {
         answerItems: 1,
@@ -57,7 +57,7 @@ export function saveInventory(inventory: ItemInventory): void {
   localStorage.setItem('cookierun_item_inventory', JSON.stringify(inventory));
 }
 
-export function useAnswerItem(): { success: boolean; updated: ItemInventory } {
+export function consumeAnswerItem(): { success: boolean; updated: ItemInventory } {
   const inv = getInventory();
   if (inv.answerItems > 0) {
     inv.answerItems -= 1;
@@ -67,7 +67,7 @@ export function useAnswerItem(): { success: boolean; updated: ItemInventory } {
   return { success: false, updated: inv };
 }
 
-export function useHintItem(): { success: boolean; updated: ItemInventory } {
+export function consumeHintItem(): { success: boolean; updated: ItemInventory } {
   const inv = getInventory();
   if (inv.hintItems > 0) {
     inv.hintItems -= 1;
