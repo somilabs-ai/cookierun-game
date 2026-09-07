@@ -1,3 +1,4 @@
+import { createLocalStore, useLocalStore, Snapshot } from './localStore';
 import { DifficultyLevel } from '@/types/cookie';
 import { ThemeColor, getStoredTheme, saveTheme } from '@/lib/theme';
 
@@ -40,8 +41,20 @@ export function saveUserProfile(
   if (typeof window !== 'undefined') {
     localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(profile));
     saveTheme(theme);
+    profileStore.invalidate();
   }
   return profile;
+}
+
+export const profileStore = createLocalStore<UserProfile | null>(getUserProfile, null);
+
+/**
+ * 프로필을 외부 스토어로 구독한다.
+ * `loaded` 는 하이드레이션 완료 여부다 — 아직 false 면 "프로필이 없다" 가 아니라
+ * "아직 모른다" 이므로, 온보딩 모달을 여는 판단에 그대로 쓰면 안 된다.
+ */
+export function useUserProfile(): Snapshot<UserProfile | null> {
+  return useLocalStore(profileStore);
 }
 
 export function hasUserProfile(): boolean {

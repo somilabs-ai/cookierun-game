@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { DifficultyLevel, LanguageCode } from '@/types/cookie';
 import { UserProfile, getUserProfile, saveUserProfile } from '@/lib/user';
 import { ThemeColor, THEME_CONFIGS, getStoredTheme } from '@/lib/theme';
@@ -27,30 +27,31 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
   canCloseWithoutSaving = false,
   activeLang = 'ko'
 }) => {
-  const [nickname, setNickname] = useState<string>('');
-  const [difficulty, setDifficulty] = useState<DifficultyLevel>('normal');
-  const [theme, setThemeState] = useState<ThemeColor>('royal_slate');
-  const [errorMsg, setErrorMsg] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (isOpen) {
-      const existing = getUserProfile();
-      if (existing) {
-        setNickname(existing.nickname);
-        setDifficulty(existing.preferredDifficulty);
-        setThemeState(existing.preferredTheme || getStoredTheme());
-      } else {
-        // Random default nickname suggestion
-        const randomNum = Math.floor(1000 + Math.random() * 9000);
-        setNickname(`용감한쿠키_${randomNum}`);
-        setDifficulty('normal');
-        setThemeState(getStoredTheme());
-      }
-      setErrorMsg(null);
+  // 폼 초기값은 마운트 시 한 번만 읽는다. 종전에는 useEffect([isOpen]) 안에서
+  // setState 로 채웠는데, 그 패턴은 연쇄 렌더를 유발한다(somilabs-hub#185).
+  // 부모가 isOpen 일 때만 이 컴포넌트를 렌더하므로 "열릴 때마다 초기화" 동작은 같다.
+  const [initial] = useState(() => {
+    const existing = getUserProfile();
+    if (existing) {
+      return {
+        nickname: existing.nickname,
+        difficulty: existing.preferredDifficulty,
+        theme: existing.preferredTheme || getStoredTheme()
+      };
     }
-  }, [isOpen]);
+    // 첫 방문이면 닉네임을 제안한다.
+    const randomNum = Math.floor(1000 + Math.random() * 9000);
+    return {
+      nickname: `용감한쿠키_${randomNum}`,
+      difficulty: 'normal' as DifficultyLevel,
+      theme: getStoredTheme()
+    };
+  });
 
-  if (!isOpen) return null;
+  const [nickname, setNickname] = useState<string>(initial.nickname);
+  const [difficulty, setDifficulty] = useState<DifficultyLevel>(initial.difficulty);
+  const [theme, setThemeState] = useState<ThemeColor>(initial.theme);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
