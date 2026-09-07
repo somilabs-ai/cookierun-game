@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { COOKIES_DATA } from '@/data/cookies';
 import { CookieData, DifficultyLevel, LanguageCode } from '@/types/cookie';
 import { isCorrectAnswer } from '@/lib/hangul';
-import { useAnswerItem, useHintItem, getInventory, ItemInventory } from '@/lib/items';
+import { consumeAnswerItem, consumeHintItem, getInventory, ItemInventory } from '@/lib/items';
 import { markDifficultyCleared, hasClearedDifficulty, getCookieStars } from '@/lib/stars';
 import { UI_TRANSLATIONS } from '@/lib/i18n';
 import confetti from 'canvas-confetti';
@@ -47,8 +47,8 @@ export const QuoteQuizGame: React.FC<QuoteQuizGameProps> = ({
   const [inventory, setInventory] = useState<ItemInventory>({
     answerItems: 1,
     hintItems: 1,
-    lastAnswerRecharge: Date.now(),
-    lastHintRecharge: Date.now()
+    lastAnswerRecharge: 0,
+    lastHintRecharge: 0
   });
 
   const refreshInventory = () => {
@@ -148,7 +148,7 @@ export const QuoteQuizGame: React.FC<QuoteQuizGameProps> = ({
   // 💡 힌트 아이템 사용
   const handleUseHintItem = () => {
     if (hintLevel >= 3 || isAnswered) return;
-    const res = useHintItem();
+    const res = consumeHintItem();
     if (res.success) {
       setHintLevel((prev) => prev + 1);
       setInventory(res.updated);
@@ -164,7 +164,7 @@ export const QuoteQuizGame: React.FC<QuoteQuizGameProps> = ({
   // 🔮 정답 표시 아이템 사용
   const handleUseAnswerItem = () => {
     if (isAnswered) return;
-    const res = useAnswerItem();
+    const res = consumeAnswerItem();
     if (res.success) {
       setInventory(res.updated);
       if (onInventoryUpdate) onInventoryUpdate(res.updated);
