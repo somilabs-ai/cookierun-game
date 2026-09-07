@@ -30,8 +30,8 @@ export default function Home() {
   const [inventory, setInventory] = useState<ItemInventory>({
     answerItems: 1,
     hintItems: 1,
-    lastAnswerRecharge: Date.now(),
-    lastHintRecharge: Date.now()
+    lastAnswerRecharge: 0,
+    lastHintRecharge: 0
   });
 
   useEffect(() => {
