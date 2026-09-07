@@ -1,3 +1,4 @@
+import { createLocalStore, useLocalStore } from './localStore';
 import { createClient } from '@supabase/supabase-js';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
@@ -26,4 +27,20 @@ export function getLocalStats() {
 export function saveLocalStats(stats: { totalScore: number; currentStreak: number; maxStreak: number }) {
   if (typeof window === 'undefined') return;
   localStorage.setItem('cookierun_game_stats', JSON.stringify(stats));
+  statsStore.invalidate();
+}
+
+export interface LocalStats {
+  totalScore: number;
+  currentStreak: number;
+  maxStreak: number;
+}
+
+const DEFAULT_STATS: LocalStats = { totalScore: 0, currentStreak: 0, maxStreak: 0 };
+
+export const statsStore = createLocalStore<LocalStats>(getLocalStats, DEFAULT_STATS);
+
+/** 로컬 통계를 외부 스토어로 구독한다. saveLocalStats 가 불리면 자동 갱신된다. */
+export function useLocalStats(): LocalStats {
+  return useLocalStore(statsStore).value;
 }

@@ -12,55 +12,43 @@ import { InitialSpeedQuizGame } from '@/components/games/InitialSpeedQuizGame';
 import { SilhouetteQuizGame } from '@/components/games/SilhouetteQuizGame';
 import { CookidleGame } from '@/components/games/CookidleGame';
 import { KingdomNewsSection } from '@/components/news/KingdomNewsSection';
-import { getLocalStats, saveLocalStats } from '@/lib/supabase';
-import { getInventory, ItemInventory } from '@/lib/items';
-import { getUserProfile, UserProfile } from '@/lib/user';
+import { saveLocalStats, useLocalStats } from '@/lib/supabase';
+import { useInventory } from '@/lib/items';
+import { UserProfile, useUserProfile } from '@/lib/user';
 import { applyThemeToDocument } from '@/lib/theme';
 
 export default function Home() {
   const [activeMode, setActiveMode] = useState<GameModeId>('mode-3-quote');
-  const [difficulty, setDifficulty] = useState<DifficultyLevel>('normal');
-  const [totalScore, setTotalScore] = useState<number>(0);
-  const [streak, setStreak] = useState<number>(0);
-  const [maxStreak, setMaxStreak] = useState<number>(0);
 
-  const [userProfile, setUserProfileState] = useState<UserProfile | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  // localStorage 는 외부 스토어로 구독한다 — 종전처럼 useEffect 안에서 setState 로
+  // 채우면 연쇄 렌더를 유발한다(somilabs-hub#185).
+  const { totalScore, currentStreak: streak, maxStreak } = useLocalStats();
+  const inventory = useInventory();
+  const { loaded: profileLoaded, value: userProfile } = useUserProfile();
 
-  const [inventory, setInventory] = useState<ItemInventory>({
-    answerItems: 1,
-    hintItems: 1,
-    lastAnswerRecharge: 0,
-    lastHintRecharge: 0
-  });
+  // 난이도는 프로필을 기본값으로 쓰되 사용자가 그 자리에서 바꿀 수 있다.
+  const [difficultyOverride, setDifficultyOverride] = useState<DifficultyLevel | null>(null);
+  const difficulty: DifficultyLevel =
+    difficultyOverride ?? userProfile?.preferredDifficulty ?? 'normal';
 
+  // 온보딩 모달: 프로필이 없으면 자동으로 열되, 하이드레이션 전(profileLoaded=false)에는
+  // "아직 모른다" 이므로 열지 않는다. 그래야 프로필이 있는 사용자에게 모달이 깜빡이지 않는다.
+  const [modalRequested, setModalRequested] = useState<boolean>(false);
+  const [onboardingDismissed, setOnboardingDismissed] = useState<boolean>(false);
+  const isModalOpen =
+    modalRequested || (profileLoaded && userProfile === null && !onboardingDismissed);
+
+  // 테마 적용은 setState 가 아니라 DOM 부수효과라 effect 가 맞다.
   useEffect(() => {
-    const stats = getLocalStats();
-    setTotalScore(stats.totalScore || 0);
-    setStreak(stats.currentStreak || 0);
-    setMaxStreak(stats.maxStreak || 0);
-    setInventory(getInventory());
-
-    const profile = getUserProfile();
-    if (profile) {
-      setUserProfileState(profile);
-      setDifficulty(profile.preferredDifficulty);
-      if (profile.preferredTheme) {
-        applyThemeToDocument(profile.preferredTheme);
-      }
-    } else {
-      setIsModalOpen(true); // Open modal on first launch to request nickname!
+    if (userProfile?.preferredTheme) {
+      applyThemeToDocument(userProfile.preferredTheme);
     }
-  }, []);
+  }, [userProfile?.preferredTheme]);
 
   const handleSuccess = (points: number) => {
     const newScore = totalScore + points;
     const newStreak = streak + 1;
     const newMaxStreak = Math.max(maxStreak, newStreak);
-
-    setTotalScore(newScore);
-    setStreak(newStreak);
-    setMaxStreak(newMaxStreak);
 
     saveLocalStats({
       totalScore: newScore,
@@ -70,7 +58,6 @@ export default function Home() {
   };
 
   const handleFailure = () => {
-    setStreak(0);
     saveLocalStats({
       totalScore,
       currentStreak: 0,
@@ -79,12 +66,10 @@ export default function Home() {
   };
 
   const handleModalClose = (profile: UserProfile) => {
-    setUserProfileState(profile);
-    setDifficulty(profile.preferredDifficulty);
-    if (profile.preferredTheme) {
-      applyThemeToDocument(profile.preferredTheme);
-    }
-    setIsModalOpen(false);
+    // 프로필·테마는 saveUserProfile 이 스토어를 갱신하므로 여기서 setState 하지 않는다.
+    setDifficultyOverride(profile.preferredDifficulty);
+    setModalRequested(false);
+    setOnboardingDismissed(true);
   };
 
   const activeLang = difficulty === 'normal' ? 'ko' : difficulty === 'master' ? 'en' : difficulty === 'expert' ? 'es' : 'en';
@@ -100,7 +85,7 @@ export default function Home() {
         activeLang={activeLang}
         difficulty={difficulty}
         userProfile={userProfile}
-        onOpenProfileModal={() => setIsModalOpen(true)}
+        onOpenProfileModal={() => setModalRequested(true)}
       />
 
       {/* Main Content Area */}
@@ -108,7 +93,7 @@ export default function Home() {
         {/* Difficulty Selector Bar */}
         <DifficultySelector
           difficulty={difficulty}
-          onSelectDifficulty={(diff) => setDifficulty(diff)}
+          onSelectDifficulty={(diff) => setDifficultyOverride(diff)}
         />
 
         {/* Item Badge Bar */}
@@ -120,7 +105,7 @@ export default function Home() {
             difficulty={difficulty}
             onSuccess={handleSuccess}
             onFailure={handleFailure}
-            onInventoryUpdate={(inv) => setInventory(inv)}
+            onInventoryUpdate={() => { /* saveInventory 가 스토어를 갱신한다 */ }}
           />
         )}
         {activeMode === 'mode-5-worldcup' && <IdealWorldcupGame />}
@@ -137,12 +122,15 @@ export default function Home() {
       </main>
 
       {/* Onboarding & Profile Modal */}
-      <OnboardingModal
-        isOpen={isModalOpen}
-        onClose={handleModalClose}
-        canCloseWithoutSaving={!!userProfile}
-        activeLang={activeLang}
-      />
+      {/* 열릴 때만 마운트한다 — 폼 초기값을 마운트 시 읽으므로 매번 새로 채워진다. */}
+      {isModalOpen && (
+        <OnboardingModal
+          isOpen
+          onClose={handleModalClose}
+          canCloseWithoutSaving={!!userProfile}
+          activeLang={activeLang}
+        />
+      )}
 
       {/* Footer */}
       <footer className="border-t border-slate-800 bg-slate-950/80 py-6 text-center text-xs text-slate-400 space-y-1">

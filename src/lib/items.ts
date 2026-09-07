@@ -1,3 +1,5 @@
+import { createLocalStore, useLocalStore } from './localStore';
+
 export interface ItemInventory {
   answerItems: number;        // 정답 표시 아이템 (Max: 5, 하루 1개 충전)
   hintItems: number;          // 힌트 표시 아이템 (Max: 3, 1시간 1개 충전)
@@ -55,6 +57,21 @@ export function getInventory(): ItemInventory {
 export function saveInventory(inventory: ItemInventory): void {
   if (typeof window === 'undefined') return;
   localStorage.setItem('cookierun_item_inventory', JSON.stringify(inventory));
+  inventoryStore.invalidate();
+}
+
+const DEFAULT_INVENTORY: ItemInventory = {
+  answerItems: 1,
+  hintItems: 1,
+  lastAnswerRecharge: 0,
+  lastHintRecharge: 0
+};
+
+export const inventoryStore = createLocalStore<ItemInventory>(getInventory, DEFAULT_INVENTORY);
+
+/** 인벤토리를 외부 스토어로 구독한다. saveInventory 가 불리면 자동 갱신된다. */
+export function useInventory(): ItemInventory {
+  return useLocalStore(inventoryStore).value;
 }
 
 export function consumeAnswerItem(): { success: boolean; updated: ItemInventory } {

@@ -6,15 +6,20 @@ const eslintConfig = defineConfig([
   ...nextVitals,
   ...nextTs,
   {
+    // react-hooks v7(React Compiler 규칙)의 set-state-in-effect 예외.
+    //
+    // localStorage 하이드레이션 2건(page.tsx, OnboardingModal)은 somilabs-hub#185 에서
+    // useSyncExternalStore / 마운트 시 초기화로 해소했다. 아래 3개는 게임 로직이라
+    // 구조 변경 위험이 크고 이 repo 에 테스트가 없어 남겨 둔다.
+    //
+    // **파일을 특정해 완화한다** — 다른 곳에서 같은 패턴이 새로 생기면 error 로 막힌다.
+    // 세 파일을 정리하면 이 블록을 통째로 지운다.
+    files: [
+      'src/components/games/CookidleGame.tsx',
+      'src/components/games/IdealWorldcupGame.tsx',
+      'src/components/games/InitialSpeedQuizGame.tsx',
+    ],
     rules: {
-      // eslint-plugin-react-hooks v7 이 React Compiler 규칙으로 새로 넣은 것.
-      // 이 코드베이스의 해당 5곳은 모두 정당한 용도다:
-      //   - localStorage 하이드레이션(page.tsx, OnboardingModal) — SSR 이라 렌더 중 읽을 수 없다
-      //   - 마운트 시 게임 초기화(CookidleGame, IdealWorldcupGame)
-      //   - 타이머 만료 처리(InitialSpeedQuizGame)
-      // 규칙을 지키려면 useSyncExternalStore 도입 등 구조 변경이 필요한데,
-      // 그건 lint 정리와 별개 작업이다. 가시성은 유지하되 CI 를 막지 않도록 warn 으로 둔다.
-      // 되돌릴 때는 이 블록을 지우면 된다. — somilabs-hub#184
       'react-hooks/set-state-in-effect': 'warn',
     },
   },
