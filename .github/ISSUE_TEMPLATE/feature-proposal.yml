@@ -1,0 +1,38 @@
+name: 기능 제안
+description: 있었으면 하는 기능이나 바꾸고 싶은 점을 알려 주세요. 검토한 뒤 계획에 넣을지 정합니다.
+title: "[기능 제안] "
+labels: ["status:triage", "기능 제안"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        이 양식은 **외부 접수**입니다. 등록하면 `status:triage` 와 `기능 제안` 라벨이 붙고 자동으로 실행되지 않습니다.
+        검토해서 계획에 넣기로 하면 마일스톤을 붙여 개발 task 로 바꿉니다. 수용 기준은 적지 않아도 됩니다.
+  - type: textarea
+    id: situation
+    attributes:
+      label: 상황
+      description: 지금 어떤 상황에서 무엇을 하고 있나요? 어디가 불편한가요?
+    validations:
+      required: true
+  - type: textarea
+    id: want
+    attributes:
+      label: 원하는 것
+      description: 어떻게 되면 좋겠나요? 화면·동작으로 적어 주세요.
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: 왜
+      description: 이것이 있으면 무엇이 좋아지나요? 누가 쓰나요?
+    validations:
+      required: true
+  - type: textarea
+    id: extra
+    attributes:
+      label: 참고
+      description: 화면 캡처, 비슷한 사례, 링크 등이 있으면 붙여 주세요.
+    validations:
+      required: false

@@ -1,0 +1,55 @@
+name: 개발 task
+description: 계획된 개발 일(기능 추가·기존 기능 개선·버그 수정). 마일스톤을 붙여 등록합니다.
+title: ""
+body:
+  - type: markdown
+    attributes:
+      value: |
+        이 양식은 **개발 task** 입니다. 라벨을 자동으로 붙이지 않습니다 — 자동 실행 대상이 될 수 있으므로 등록하는 사람이 의도해서 고릅니다.
+        - 등록할 때 오른쪽 **Milestone 에서 현재 또는 다음 마일스톤**을 고릅니다. 마일스톤이 없으면 접수로 취급되어 실행되지 않습니다.
+        - 상태 라벨(`status:todo` 등)과 담당 라벨은 hub 표준 `docs/standards/task-board.md` 를 따라 직접 붙입니다.
+        - 외부 접수(기능 제안·버그 발견)에서 나온 일이면 `Origin:` 에 그 이슈를 적습니다.
+  - type: textarea
+    id: goal
+    attributes:
+      label: 할 일
+      description: 무엇을 만들거나 바꾸나요? 범위와 범위 밖을 적습니다.
+    validations:
+      required: true
+  - type: input
+    id: origin
+    attributes:
+      label: "Origin:"
+      description: 이 task 가 나온 접수 이슈. 없으면 비웁니다. 전체 표기로 적습니다.
+      placeholder: "somilabs-dev/<저장소>#N"
+    validations:
+      required: false
+  - type: input
+    id: depends
+    attributes:
+      label: 선행
+      description: 먼저 끝나야 하는 이슈. 없으면 "없음".
+      placeholder: "somilabs-dev/<저장소>#N, somilabs-dev/somilabs-hub#N 또는 없음"
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: 수용 기준
+      description: 끝났다고 말할 수 있는 조건. 사람이 읽고 판정할 수 있게 구체적으로 적습니다.
+    validations:
+      required: true
+  - type: textarea
+    id: verify
+    attributes:
+      label: 검증 기준 (verify 블록)
+      description: |
+        기계가 실행해 완료를 판정하는 명령. 저장소 루트 기준 상대 경로로 쓰고, 한 줄에 명령 하나.
+        고정 개수·버전 같은 스냅샷 값 대신 불변식으로 씁니다. 화면 작업은 Playwright spec 을 포함합니다.
+        형식만 맞추면 통과하는 명령(예: 이름만 grep)은 쓰지 않습니다 — 동작을 검사합니다.
+      value: |
+        ```verify
+        <테스트 명령 — 예: pnpm test, uv run pytest tests/test_x.py -q, npx playwright test e2e/x.spec.ts>
+        ```
+    validations:
+      required: true
