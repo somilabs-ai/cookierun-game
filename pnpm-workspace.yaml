@@ -1,3 +1,6 @@
 # 설치 스크립트 허용 목록(pnpm 11). unrs-resolver 는 미리 빌드된 바인딩(@unrs/resolver-binding-*)을 쓰므로 스크립트가 필요 없다.
 allowBuilds:
   unrs-resolver: false
+
+# worktree 가 주 체크아웃 node_modules 를 공유해도 pnpm run/exec 가 의존성 검사로 지우지 않게 한다(hub#2213).
+verifyDepsBeforeRun: false
